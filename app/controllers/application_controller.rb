@@ -1,4 +1,8 @@
+require './config/environment'
+
 class ApplicationController < Sinatra::Base
+  set :views, Proc.new { File.join(root, "../views/") }
+
   configure do
     set :public_folder, 'public'
     set :views, 'app/views'
@@ -8,52 +12,46 @@ class ApplicationController < Sinatra::Base
     redirect '/recipes'
   end
 
+  get '/recipes/new' do
+    erb :new
+  end
+
   get '/recipes' do
     @recipes = Recipe.all
     erb :index
   end
 
-  get '/recipes/new' do
-   erb :new
- end
-
- post '/recipes' do
-   @recipes = Recipe.new(name: params[:name],ingredients: params[:ingredients],cook_time: params[:cook_time])
-     @recipes.save
-     redirect "/recipes/#{@recipes.id}"
- end
-
   get '/recipes/:id' do
-    @recipes = Recipe.find_by(params[:id])
+    @recipes = Recipe.find_by_id(params[:id])
     erb :show
   end
 
-  post '/recipes/:id' do
-    @recipes = Recipe.create(params)
-    redirect to "/recipes/#{@recipes.id}"
-  end
-
   get '/recipes/:id/edit' do
-    @recipes = Recipe.find_by(params[:id])
+    @recipes = Recipe.find_by_id(params[:id])
     erb :edit
   end
 
   patch '/recipes/:id' do
-    Recipe.find(params[:id]).tap do |recipe|
-      recipe.update(
-        name: params[:name],
-        ingredients: params[:ingredients],
-        cook_time: params[:cook_time]
-      )
+      id = params[:id]
+         new_params = {}
+         old = Recipe.find(id)
+         new_params[:name] = params[:name]
+         new_params[:ingredients] = params[:ingredients]
+         new_params[:cook_time] = params[:cook_time]
+         old.update(new_params)
 
-      redirect "/recipes/#{@recipes.id}"
-
+      redirect to "/recipes/#{@recipes.id}"
     end
+
+  post '/recipes' do
+    @recipes = Recipe.create(params)
+    redirect to "/recipes/#{@recipes.id}"
   end
 
-  delete '/recipes/:id/delete' do
-    Recipe.find(params[:id]).clear
-    redirect '/recipes'
+  delete '/recipes/:id' do
+    @recipes = Recipe.find_by_id(params[:id])
+    @recipes.delete
+    redirect to '/recipes'
   end
 
 end
