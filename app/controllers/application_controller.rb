@@ -14,7 +14,9 @@ class ApplicationController < Sinatra::Base
 
   post '/recipes' do
     @recipe = Recipe.create(params)
-    erb :new
+    @recipe.save
+    # binding.pry
+    erb :show
   end
 
   get '/recipes/:id' do
