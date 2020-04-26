@@ -1,0 +1,14 @@
+<%if @recipe %>
+  <h1><%=@recipe.name%></h1>
+  <p><%=@recipe.ingredients%></p>
+  <p><b><%=@recipe.cook_time%></b></p>
+<%end%>
+<form method="post" action="/recipes" id="thisForm">
+  <label for="name">Recipe:</label><br>
+  <input type="text" name="name"><br>
+  <label for="ingredients">~ ~ ~ ~ Ingredients ~ ~ ~ ~</label><br>
+  <textarea name="ingredients" form="thisForm"></textarea><br>
+  <label for="cook_time">Cook Time:</label><br>
+  <input type="text" name="cook_time"><br>
+  <input type="submit" id="submit">
+</form>
