@@ -1,0 +1,10 @@
+<h1>Index Page</h1>
+
+Welcome to your Recipe Book!
+
+<% @recipes.map do |recipe| %>
+    <li><a href= "/recipes/<%= recipe.id %>"> <%= recipe.name %></li>
+ <% end %>
+
+
+
