@@ -12,6 +12,7 @@ gem 'shotgun'
 gem 'json'
 gem 'pry'
 gem 'database_cleaner'
+gem 'bigdecimal', '~> 1.4'
 
 group :test do
   gem 'rspec'
